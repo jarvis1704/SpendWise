@@ -342,10 +342,10 @@ private fun ChartCard(
 private fun EmptyInsightsState() {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(vertical = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.Center
     ) {
         Icon(
             imageVector = Icons.Default.AutoAwesome,
@@ -353,11 +353,13 @@ private fun EmptyInsightsState() {
             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
             modifier = Modifier.size(64.dp)
         )
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "No insights yet",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
+        Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = "Add some transactions to see your spending analytics here.",
             style = MaterialTheme.typography.bodyMedium,
