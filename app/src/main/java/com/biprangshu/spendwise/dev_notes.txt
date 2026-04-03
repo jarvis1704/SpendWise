@@ -1,4 +1,3 @@
-todo: check the add transaction screen for a todo for tags
 todo: check out the mainactivity code and move it to different file
 todo: make curreny symbol dynamic by allowing user to type it
 todo: fix ui of budget set modal with no ruppes symbol in the text box and all the changes
@@ -7,6 +6,7 @@ todo: check out the confetti animations works well or not
 todo: fix bug with undo action after deleting from history screen
 todo: work on the widgets
 todo: add the custom fonts
+todo: fix bug where the overspent value is not shown in HomeHeroCard
 
 Phase 1 Done with some minor UI changes to be done
 Phase 2 Started
