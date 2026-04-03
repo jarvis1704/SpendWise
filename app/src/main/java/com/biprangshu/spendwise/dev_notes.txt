@@ -1,0 +1,9 @@
+todo: check the add transaction screen for a todo for tags
+todo: check out the mainactivity code and move it to different file
+todo: make curreny symbol dynamic by allowing user to type it
+todo: fix ui of budget set modal with no ruppes symbol in the text box and all the changes
+todo: ui: fix them after the base app is ready
+todo: check out the confetti animations works well or not
+
+Phase 1 Done with some minor UI changes to be done
+Phase 2 Started
