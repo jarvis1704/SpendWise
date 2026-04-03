@@ -3,8 +3,11 @@ package com.biprangshu.spendwise.ui.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.biprangshu.spendwise.domain.model.Transaction
+import com.biprangshu.spendwise.domain.usecase.AddTransactionUseCase
+import com.biprangshu.spendwise.domain.usecase.DeleteTransactionUseCase
 import com.biprangshu.spendwise.domain.usecase.GetAllTransactionsUseCase
 import com.biprangshu.spendwise.domain.usecase.SearchTransactionsUseCase
+import kotlinx.coroutines.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +27,9 @@ data class HistoryUiState(
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val getAllTransactionsUseCase: GetAllTransactionsUseCase,
-    private val searchTransactionsUseCase: SearchTransactionsUseCase
+    private val searchTransactionsUseCase: SearchTransactionsUseCase,
+    private val deleteTransactionUseCase: DeleteTransactionUseCase,
+    private val addTransactionUseCase: AddTransactionUseCase
 ) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
@@ -55,5 +60,13 @@ class HistoryViewModel @Inject constructor(
 
     fun onSearchQueryChange(query: String) {
         _searchQuery.update { query }
+    }
+
+    fun deleteTransaction(transaction: Transaction) {
+        viewModelScope.launch { deleteTransactionUseCase(transaction) }
+    }
+
+    fun restoreTransaction(transaction: Transaction) {
+        viewModelScope.launch { addTransactionUseCase(transaction) }
     }
 }

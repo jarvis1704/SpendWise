@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.animation.core)
+    implementation(libs.androidx.compose.animation)
 
     // Hilt
     implementation(libs.hilt.android)
