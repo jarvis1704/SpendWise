@@ -5,6 +5,8 @@ todo: fix ui of budget set modal with no ruppes symbol in the text box and all t
 todo: ui: fix them after the base app is ready
 todo: check out the confetti animations works well or not
 todo: fix bug with undo action after deleting from history screen
+todo: work on the widgets
+todo: add the custom fonts
 
 Phase 1 Done with some minor UI changes to be done
 Phase 2 Started
