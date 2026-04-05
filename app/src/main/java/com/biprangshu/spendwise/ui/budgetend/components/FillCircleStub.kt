@@ -38,12 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.biprangshu.spendwise.ui.components.confetti.ConfettiController
 import kotlinx.coroutines.launch
 
-/**
- * A circular celebration button that spawns confetti when clicked.
- * Shows a party emoji (🎉) and has a press animation.
- * 
- * Based on Buckwheat's FillCircleStub implementation.
- */
+
 @Composable
 fun FillCircleStub(
     confettiController: ConfettiController,

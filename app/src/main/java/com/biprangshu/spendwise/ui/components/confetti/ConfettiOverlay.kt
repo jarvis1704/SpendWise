@@ -21,14 +21,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import kotlin.math.cos
 import kotlin.math.sin
 
-/**
- * Confetti overlay composable that renders particles using Canvas.
- * Based on the Buckwheat app's ConfettiBox implementation.
- *
- * @param controller The ConfettiController managing particles
- * @param modifier Modifier for the overlay
- * @param onAnimationComplete Callback when all particles have finished
- */
+
 @Composable
 fun ConfettiOverlay(
     controller: ConfettiController,
@@ -134,7 +127,6 @@ private fun DrawScope.drawParticle(particle: Particle) {
 
 /**
  * Spawns celebration confetti from the top of the screen.
- * Call this when user achieves a milestone.
  */
 @Composable
 fun rememberConfettiController(): ConfettiController {

@@ -24,12 +24,7 @@ data class DonutSegment(
     val label: String
 )
 
-/**
- * A donut chart composable that displays segments with minimum angle support.
- * Small segments are guaranteed a minimum visibility.
- * 
- * Based on Buckwheat's DonutChart implementation.
- */
+//donut chart composable that displays segments with minimum angle support
 @Composable
 fun DonutChart(
     segments: List<DonutSegment>,
@@ -43,7 +38,7 @@ fun DonutChart(
     val total = segments.sumOf { it.value }
     if (total <= 0) return
     
-    // Calculate angles with minimum angle guarantee
+
     val angles = remember(segments, minAngle) {
         calculateSegmentAngles(segments, total, minAngle, gapAngle)
     }
@@ -77,10 +72,7 @@ fun DonutChart(
     }
 }
 
-/**
- * Calculates segment angles ensuring each segment has at least minAngle.
- * "Steals" from larger segments to give minimum to smaller ones.
- */
+
 private fun calculateSegmentAngles(
     segments: List<DonutSegment>,
     total: Double,
@@ -90,12 +82,12 @@ private fun calculateSegmentAngles(
     val totalGap = gapAngle * segments.size
     val availableAngle = 360f - totalGap
     
-    // Calculate natural angles
+
     val naturalAngles = segments.map { 
         (it.value / total * availableAngle).toFloat() 
     }
     
-    // Find segments that need minimum angle
+
     val needsMin = naturalAngles.map { it < minAngle }
     val smallSegmentCount = needsMin.count { it }
     
@@ -103,12 +95,12 @@ private fun calculateSegmentAngles(
         return naturalAngles.map { it + gapAngle }
     }
     
-    // Calculate how much we need to steal from larger segments
+
     val deficit = needsMin.mapIndexed { i, needs ->
         if (needs) minAngle - naturalAngles[i] else 0f
     }.sum()
     
-    // Distribute deficit proportionally from larger segments
+
     val largeSegmentsTotal = naturalAngles.filterIndexed { i, _ -> !needsMin[i] }.sum()
     
     return naturalAngles.mapIndexed { i, angle ->

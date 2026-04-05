@@ -43,12 +43,7 @@ import com.biprangshu.spendwise.util.combineColors
 import java.text.NumberFormat
 import java.util.Locale
 
-/**
- * A card showing remaining vs spent budget with an animated wavy progress indicator.
- * Clicking toggles between "Remaining" and "Spent" views.
- * 
- * Based on Buckwheat's RestAndSpentBudgetCard implementation.
- */
+
 @Composable
 fun RestAndSpentBudgetCard(
     totalBudget: Double,

@@ -37,7 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.biprangshu.spendwise.ui.components.confetti.ConfettiOverlay
 import com.biprangshu.spendwise.ui.components.confetti.rememberConfettiController
@@ -52,8 +52,6 @@ import com.biprangshu.spendwise.ui.theme.colorExpense
 import com.biprangshu.spendwise.ui.theme.colorIncome
 import com.biprangshu.spendwise.ui.theme.robotoFlexTopBarStyle
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
-import com.patrykandpatrick.vico.core.cartesian.data.ColumnCartesianLayerModel
-import com.patrykandpatrick.vico.core.cartesian.data.LineCartesianLayerModel
 import com.patrykandpatrick.vico.core.cartesian.data.columnSeries
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import java.time.Instant
@@ -62,6 +60,7 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.Locale
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @Composable
 fun InsightsScreen(
@@ -85,12 +84,12 @@ fun InsightsScreen(
 
     var showChatSheet by remember { mutableStateOf(false) }
 
-    // Confetti controller for streak celebrations
+
     val confettiController = rememberConfettiController()
     var screenWidth by remember { mutableStateOf(0f) }
     var screenHeight by remember { mutableStateOf(0f) }
 
-    // Trigger confetti when celebration is pending
+
     LaunchedEffect(showConfetti) {
         if (showConfetti && screenWidth > 0 && screenHeight > 0) {
             confettiController.spawnCelebration(
@@ -269,19 +268,25 @@ fun InsightsScreen(
                         }
 
                         // Budget pace insight
+                        val startPeriodDate by viewModel.startPeriodDate.collectAsStateWithLifecycle()
                         if (totalBudget > 0 && finishPeriodDate != null) {
                             val endDate = Instant.ofEpochMilli(finishPeriodDate!!)
                                 .atZone(ZoneId.systemDefault()).toLocalDate()
                             val daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), endDate).coerceAtLeast(0)
+                            val totalPeriodDays = if (startPeriodDate != null){
+                                val start = Instant.ofEpochMilli(startPeriodDate!!)
+                                    .atZone(ZoneId.systemDefault()).toLocalDate()
+                                ChronoUnit.DAYS.between(start, endDate) + 1
+                            } else daysLeft+1
                             val budgetRemaining = totalBudget - periodExpense
                             val isOnTrack = budgetRemaining >= 0
-                            val dailyAllowance = if (daysLeft > 0 && budgetRemaining > 0) budgetRemaining / daysLeft else 0.0
+                            val dailyAllowance = if (totalPeriodDays > 0) (totalBudget / totalPeriodDays).roundToInt() else 0
                             InsightCard(
                                 icon = if (isOnTrack) Icons.Default.CheckCircle else Icons.Default.Warning,
                                 iconTint = if (isOnTrack) colorIncome else colorExpense,
                                 title = if (isOnTrack) "On Track" else "Over Budget",
                                 body = if (isOnTrack)
-                                    "$daysLeft days left — $currencySymbol${formatAmount(dailyAllowance)}/day available."
+                                    "$daysLeft days left — $currencySymbol${dailyAllowance}/day available."
                                 else
                                     "You've exceeded your period budget by $currencySymbol${formatAmount(abs(budgetRemaining))}."
                             )

@@ -147,7 +147,7 @@ class HomeViewModel @Inject constructor(
             } ?: 1L
 
             val distributeDailyAllowance = if (snapshot.totalBudget > 0 && snapshot.startMs != null) {
-                ((snapshot.totalBudget - periodExpense) / remainingDays.coerceAtLeast(1))
+                ((snapshot.totalBudget - periodExpense + summary.totalExpense) / remainingDays.coerceAtLeast(1))
                     .coerceAtLeast(0.0)
             } else {
                 UserPreferencesManager.DEFAULT_DAILY_BUDGET

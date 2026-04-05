@@ -125,7 +125,7 @@ private fun HistoryScreenContent(
             OutlinedTextField(
                 value = uiState.searchQuery,
                 onValueChange = onSearchQueryChange,
-                placeholder = { Text("Search transactions...") },
+                placeholder = { Text("Search transactions") },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
@@ -145,7 +145,7 @@ private fun HistoryScreenContent(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Transaction List
+
             if (uiState.transactions.isEmpty() && !uiState.isLoading) {
                 EmptyTransactionState()
             } else {

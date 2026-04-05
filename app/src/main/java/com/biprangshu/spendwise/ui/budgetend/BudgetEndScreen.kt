@@ -19,7 +19,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -33,7 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.biprangshu.spendwise.ui.budgetend.components.CategoriesChartCard
 import com.biprangshu.spendwise.ui.budgetend.components.FillCircleStub
@@ -47,12 +49,7 @@ import com.biprangshu.spendwise.ui.components.confetti.ConfettiController
 import com.biprangshu.spendwise.ui.components.confetti.ConfettiOverlay
 import com.biprangshu.spendwise.ui.components.confetti.rememberConfettiController
 
-/**
- * Budget End Screen shown as a modal bottom sheet when a budget period ends.
- * Displays comprehensive analytics and celebration UI.
- * 
- * Based on Buckwheat's Analytics.kt implementation for the "Period Ended" state.
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BudgetEndScreen(
@@ -94,6 +91,7 @@ fun BudgetEndScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun LoadingState() {
     Box(
@@ -102,7 +100,7 @@ private fun LoadingState() {
             .height(300.dp),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator()
+        CircularWavyProgressIndicator()
     }
 }
 

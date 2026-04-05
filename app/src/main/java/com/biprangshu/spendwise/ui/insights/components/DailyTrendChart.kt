@@ -30,11 +30,9 @@ fun DailyTrendChart(
             startAxis = VerticalAxis.rememberStart(),
             bottomAxis = HorizontalAxis.rememberBottom(
                 valueFormatter = CartesianValueFormatter { _, value, _ ->
-                    // Never return empty string - Vico 2.x throws IllegalStateException
                     labels.getOrNull(value.toInt()) ?: value.toInt().toString()
                 },
                 itemPlacer = remember {
-                    // Show every 2nd label to avoid clutter (instead of returning empty strings)
                     HorizontalAxis.ItemPlacer.aligned(spacing = { 2 }, addExtremeLabelPadding = true)
                 }
             )

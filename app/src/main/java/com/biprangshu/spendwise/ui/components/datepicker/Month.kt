@@ -24,13 +24,3 @@ internal fun MonthHeader(modifier: Modifier = Modifier, yearMonth: YearMonth) {
         )
     }
 }
-
-@Preview
-@Composable
-fun PreviewMonthHeader() {
-    SpendWiseTheme{
-        MonthHeader(
-            yearMonth = YearMonth.from(LocalDate.now().withDayOfMonth(1)),
-        )
-    }
-}

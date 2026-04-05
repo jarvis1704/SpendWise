@@ -160,20 +160,14 @@ class InsightsViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Trigger confetti celebration and clear the pending flag
-     */
     private fun triggerCelebration() {
         viewModelScope.launch {
             _showConfetti.value = true
-            // Clear the pending celebration flag so it doesn't trigger again
             streakPreferencesManager.setPendingCelebration(false)
         }
     }
 
-    /**
-     * Called when confetti animation completes
-     */
+
     fun onCelebrationComplete() {
         _showConfetti.value = false
     }

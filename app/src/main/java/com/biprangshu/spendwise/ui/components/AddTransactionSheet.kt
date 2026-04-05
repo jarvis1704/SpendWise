@@ -150,7 +150,7 @@ fun AddTransactionSheet(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Type Toggle (Expense ↔ Income)
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,

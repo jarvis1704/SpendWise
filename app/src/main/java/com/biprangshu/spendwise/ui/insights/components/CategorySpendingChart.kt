@@ -30,7 +30,7 @@ fun CategorySpendingChart(
             startAxis = VerticalAxis.rememberStart(),
             bottomAxis = HorizontalAxis.rememberBottom(
                 valueFormatter = CartesianValueFormatter { _, value, _ ->
-                    // Never return empty string - Vico 2.x throws IllegalStateException
+
                     labels.getOrNull(value.toInt()) ?: value.toInt().toString()
                 }
             )

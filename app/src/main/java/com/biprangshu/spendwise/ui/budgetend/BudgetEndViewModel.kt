@@ -21,9 +21,7 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
-/**
- * UI state for the Budget End Screen.
- */
+//ui state for budget end screen
 data class BudgetEndUiState(
     val isLoading: Boolean = true,
     val totalBudget: Double = 0.0,
@@ -60,9 +58,7 @@ data class BudgetEndUiState(
             return ChronoUnit.DAYS.between(start, end) + 1
         }
     
-    /**
-     * Groups spends by category and returns a map of category to total amount.
-     */
+
     val categoryBreakdown: Map<String, Double>
         get() = spends.groupBy { it.category }
             .mapValues { (_, transactions) -> transactions.sumOf { it.amount } }
@@ -70,9 +66,7 @@ data class BudgetEndUiState(
             .sortedByDescending { it.second }
             .toMap()
     
-    /**
-     * Groups spends by date (day) and returns a map of date to total amount.
-     */
+
     val dailySpending: Map<LocalDate, Double>
         get() = spends.groupBy { transaction ->
             Instant.ofEpochMilli(transaction.date)
@@ -81,10 +75,7 @@ data class BudgetEndUiState(
         }.mapValues { (_, transactions) -> transactions.sumOf { it.amount } }
 }
 
-/**
- * ViewModel for the Budget End Screen.
- * Provides analytics data for the completed budget period.
- */
+
 @HiltViewModel
 class BudgetEndViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
@@ -150,24 +141,17 @@ class BudgetEndViewModel @Inject constructor(
         initialValue = BudgetEndUiState()
     )
     
-    /**
-     * Called when user wants to set up a new budget.
-     */
+
     fun onSetupNewBudget() {
         _showBudgetSetModal.value = true
     }
     
-    /**
-     * Called when budget set modal is dismissed.
-     */
+
     fun onBudgetSetModalDismissed() {
         _showBudgetSetModal.value = false
     }
     
-    /**
-     * Clears the current budget period data.
-     * Called after user confirms a new budget to reset the old period.
-     */
+
     fun clearCurrentPeriod() {
         viewModelScope.launch {
             preferencesManager.clearBudgetPeriod()

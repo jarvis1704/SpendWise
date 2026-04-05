@@ -7,28 +7,23 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Insights
 import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Insights
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FloatingToolbarDefaults
 import androidx.compose.material3.HorizontalFloatingToolbar
@@ -51,18 +46,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.biprangshu.spendwise.navigation.Screen
 import com.biprangshu.spendwise.navigation.SpendWiseNavGraph
-import com.biprangshu.spendwise.ui.AppStartState
 import com.biprangshu.spendwise.ui.MainViewModel
+import com.biprangshu.spendwise.ui.biometric.BiometricLockScreen
 import com.biprangshu.spendwise.ui.budgetend.BudgetEndScreen
 import com.biprangshu.spendwise.ui.components.AddTransactionSheet
 import com.biprangshu.spendwise.ui.theme.SpendWiseTheme
@@ -82,40 +76,7 @@ class MainActivity : FragmentActivity() {
     }
 }
 
-@Composable
-private fun BiometricLockScreen(onUnlockClick: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Fingerprint,
-                contentDescription = null,
-                modifier = Modifier.size(72.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = "SpendWise",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = "Authentication required",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(Modifier.height(8.dp))
-            Button(onClick = onUnlockClick) {
-                Text("Authenticate")
-            }
-        }
-    }
-}
+
 
 data class NavItem(
     val route: Screen,
@@ -160,7 +121,7 @@ fun SpendWiseApp(
         return
     }
 
-    // Trigger biometric prompt when app is ready and auth is needed
+    //biometric trigger if enabled
     LaunchedEffect(startState, isBiometricEnabled, isAuthenticated) {
         if (isBiometricEnabled && !isAuthenticated) {
             showBiometricPrompt(
@@ -171,7 +132,7 @@ fun SpendWiseApp(
         }
     }
 
-    // Lock screen gate
+    //Biometric lock screen
     if (isBiometricEnabled && !isAuthenticated) {
         BiometricLockScreen(
             onUnlockClick = {
@@ -190,10 +151,10 @@ fun SpendWiseApp(
         else -> Screen.Home
     }
 
-    // Show budget modal on home when BUDGET_SET state, OR when period ended and user dismissed the end screen
+
     val showBudgetModalOnHome = startState == AppStartState.BUDGET_SET
     
-    // Show budget end screen when period has expired
+
     val showBudgetEndScreen = startState == AppStartState.PERIOD_ENDED
 
     val navController = rememberNavController()
@@ -323,16 +284,13 @@ fun SpendWiseApp(
         )
     }
     
-    // Budget End Screen - shown when a budget period has ended
+    //budget end screen
     if (showBudgetEndScreen) {
         BudgetEndScreen(
             onSetupNewBudget = {
-                // Dismiss the budget end screen, which will trigger BUDGET_SET state
-                // and show the BudgetSetModalSheet via showBudgetModalOnHome
                 viewModel.onBudgetEndScreenDismissed()
             },
             onDismiss = {
-                // User swiped down to dismiss - also proceed to budget setup
                 viewModel.onBudgetEndScreenDismissed()
             }
         )

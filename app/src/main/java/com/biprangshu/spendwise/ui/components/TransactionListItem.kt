@@ -75,7 +75,7 @@ fun TransactionListItem(
         },
         leadingContent = {
             Icon(
-                imageVector = if (isIncome) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
+                imageVector = if (isIncome) Icons.Default.ArrowDownward else Icons.Default.ArrowUpward,
                 contentDescription = if (isIncome) "Income" else "Expense",
                 tint = amountColor,
                 modifier = Modifier.size(24.dp)

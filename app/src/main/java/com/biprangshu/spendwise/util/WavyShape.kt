@@ -11,14 +11,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import kotlin.math.PI
 import kotlin.math.sin
 
-/**
- * A Shape that creates a wavy right edge.
- * Based on Buckwheat's WavyShape implementation.
- *
- * @param period The wavelength of the wave
- * @param amplitude The height of the wave peaks
- * @param shift Animation offset (0.0 to 1.0) for animating the wave
- */
+
 class WavyShape(
     private val period: Dp,
     private val amplitude: Dp,

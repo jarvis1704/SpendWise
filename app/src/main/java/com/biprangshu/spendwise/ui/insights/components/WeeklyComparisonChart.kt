@@ -64,7 +64,6 @@ fun WeeklyComparisonChart(
                 startAxis = VerticalAxis.rememberStart(),
                 bottomAxis = HorizontalAxis.rememberBottom(
                     valueFormatter = CartesianValueFormatter { _, value, _ ->
-                        // Never return empty string - Vico 2.x throws IllegalStateException
                         when (value.toInt()) {
                             0 -> "This Week"
                             1 -> "Last Week"
@@ -72,7 +71,6 @@ fun WeeklyComparisonChart(
                         }
                     },
                     itemPlacer = remember {
-                        // Only show labels at indices 0 and 1
                         HorizontalAxis.ItemPlacer.aligned(spacing = { 1 }, addExtremeLabelPadding = true)
                     }
                 )

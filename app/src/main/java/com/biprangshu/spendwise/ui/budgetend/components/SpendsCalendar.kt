@@ -38,10 +38,9 @@ import java.time.ZoneId
 import java.time.format.TextStyle
 import java.util.Locale
 import kotlin.math.pow
+import androidx.compose.ui.platform.LocalLocale
 
-/**
- * Data for a single day in the calendar.
- */
+
 private data class CalendarDay(
     val date: LocalDate,
     val spending: Double,
@@ -54,12 +53,7 @@ private data class CalendarDay(
         get() = spending > dailyBudget
 }
 
-/**
- * A calendar heatmap showing daily spending patterns during the budget period.
- * Each day cell is colored based on how much was spent vs the daily budget.
- * 
- * Based on Buckwheat's SpendsCalendar implementation.
- */
+
 @Composable
 fun SpendsCalendar(
     dailySpending: Map<LocalDate, Double>,
@@ -172,16 +166,16 @@ private fun CalendarWeekRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // Fill in empty cells for days before period start
+
         val firstDay = days.firstOrNull() ?: return
         val dayOfWeek = firstDay.date.dayOfWeek.value // 1 (Monday) to 7 (Sunday)
         
-        // Add empty cells for days before this week's first day
+
         repeat(dayOfWeek - 1) {
             EmptyDayCell(modifier = Modifier.weight(1f))
         }
         
-        // Add actual day cells
+
         days.forEach { day ->
             DayCell(
                 day = day,
@@ -189,7 +183,7 @@ private fun CalendarWeekRow(
             )
         }
         
-        // Fill remaining empty cells
+
         val lastDayOfWeek = days.lastOrNull()?.date?.dayOfWeek?.value ?: 7
         repeat(7 - lastDayOfWeek) {
             EmptyDayCell(modifier = Modifier.weight(1f))

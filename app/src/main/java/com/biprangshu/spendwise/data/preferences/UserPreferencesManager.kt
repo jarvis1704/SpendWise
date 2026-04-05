@@ -133,4 +133,11 @@ class UserPreferencesManager(private val context: Context) {
             preferences.remove(LAST_RESIDUE_DIALOG_DAY_KEY)
         }
     }
+
+
+    suspend fun nukeAllPreferences() {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
 }

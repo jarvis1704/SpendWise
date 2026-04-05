@@ -6,10 +6,6 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-/**
- * Represents a single confetti particle with physics properties.
- * Based on the Buckwheat app's confetti system.
- */
 data class Particle(
     var x: Float,
     var y: Float,
@@ -23,12 +19,7 @@ data class Particle(
     var lifetime: Float = 1f,  // 0 to 1, decreases over time
     var shape: ParticleShape = ParticleShape.RECTANGLE
 ) {
-    /**
-     * Update particle physics for one frame
-     * @param deltaTime Time since last frame in seconds
-     * @param gravity Gravity acceleration
-     * @param friction Air friction coefficient
-     */
+
     fun update(deltaTime: Float, gravity: Float = 980f, friction: Float = 0.99f) {
         // Apply gravity
         velocityY += gravity * deltaTime
@@ -49,9 +40,7 @@ data class Particle(
         alpha = (lifetime * 1.5f).coerceIn(0f, 1f)
     }
 
-    /**
-     * Check if particle is still alive
-     */
+
     fun isAlive(): Boolean = lifetime > 0 && alpha > 0.01f
 
     companion object {
@@ -68,9 +57,7 @@ data class Particle(
             Color(0xFFFC5C65),  // Pink
         )
 
-        /**
-         * Create a particle with random properties ejected from a point
-         */
+
         fun createRandom(
             ejectPoint: Offset,
             ejectAngle: Float,  // Base angle in degrees (0 = right, 90 = up)

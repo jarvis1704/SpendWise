@@ -79,9 +79,7 @@ private fun LazyListScope.itemsCalendarMonth(
         DaysOfWeek(modifier = contentModifier)
     }
 
-    // A custom key needs to be given to these items so that they can be found in tests that
-    // need scrolling. The format of the key is ${year/month/weekNumber}. Thus,
-    // the key for the fourth week of December 2020 is "2020/12/4"
+
     itemsIndexed(month.weeks, key = { index, _ ->
         month.yearMonth.year.toString() + "/" + month.yearMonth.month.value + "/" + (index + 1).toString()
     }) { _, week ->
@@ -106,38 +104,5 @@ private fun LazyListScope.itemsCalendarMonth(
             onDayClicked = onDayClicked
         )
         Spacer(Modifier.height(8.dp))
-    }
-}
-
-@Preview(name = "EN locale", locale = "en")
-@Composable
-fun DayPreview() {
-    val context = LocalContext.current
-
-    val state = remember { mutableStateOf(CalendarState(context)) }
-
-    SpendWiseTheme{
-        Surface {
-            DatePicker(
-                state.value,
-                onDayClicked = { state.value.setSelectedDay(it) },
-            )
-        }
-    }
-}
-
-@Preview(name = "RU locale", locale = "ru")
-@Composable
-fun DayPreviewRu() {
-    val context = LocalContext.current
-    val state = remember { mutableStateOf(CalendarState(context)) }
-
-    SpendWiseTheme{
-        Surface {
-            DatePicker(
-                state.value,
-                onDayClicked = { state.value.setSelectedDay(it) },
-            )
-        }
     }
 }

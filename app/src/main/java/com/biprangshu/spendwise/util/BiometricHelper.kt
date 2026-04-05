@@ -23,7 +23,7 @@ fun showBiometricPrompt(
                 onError()
             }
 
-            // onAuthenticationFailed: prompt stays open, no action needed
+            // onAuthenticationFailed: prompt stays open
         }
     )
     val info = BiometricPrompt.PromptInfo.Builder()

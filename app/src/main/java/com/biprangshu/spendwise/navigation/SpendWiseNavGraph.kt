@@ -79,6 +79,9 @@ fun SpendWiseNavGraph(
             val endDateEpoch by backStackEntry.savedStateHandle
                 .getStateFlow("end_date_epoch", -1L)
                 .collectAsStateWithLifecycle()
+            val showBudgetFromSettings by backStackEntry.savedStateHandle
+                .getStateFlow("show_budget_sheet", false)
+                .collectAsStateWithLifecycle()
             val budgetViewModel: BudgetSetViewModel = hiltViewModel()
 
             LaunchedEffect(endDateEpoch) {
@@ -91,12 +94,14 @@ fun SpendWiseNavGraph(
             HomeScreen(
                 innerPadding = innerPadding,
                 onShowAddTransaction = onShowAddTransaction,
-                onNavigateToDatePicker = { navController.navigate(Screen.DatePicker) }
+                onNavigateToDatePicker = { navController.navigate(Screen.DatePicker) },
+                onChangeBudget = { backStackEntry.savedStateHandle["show_budget_sheet"] = true }
             )
 
-            if (showBudgetModalOnHome) {
+            if (showBudgetFromSettings || showBudgetModalOnHome) {
                 BudgetSetModalSheet(
-                    onConfirmed = { /* DataStore update via ViewModel triggers startState → HOME → modal hides */ },
+                    onConfirmed = { backStackEntry.savedStateHandle["show_budget_sheet"] = false },
+                    onDismissRequest = { backStackEntry.savedStateHandle["show_budget_sheet"] = false },
                     onNavigateToDatePicker = { navController.navigate(Screen.DatePicker) },
                     viewModel = budgetViewModel
                 )

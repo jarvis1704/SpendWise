@@ -35,17 +35,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.biprangshu.spendwise.domain.model.StreakData
 
-/**
- * A card component that displays the user's streak progress
- * for staying under their daily budget.
- */
+
 @Composable
 fun StreaksCard(
     streakData: StreakData,
     hasBudgetSet: Boolean,
     modifier: Modifier = Modifier
 ) {
-    // Don't show if no budget is set
+    //not shown if no budget is set
     if (!hasBudgetSet) return
 
     val animatedProgress by animateFloatAsState(
@@ -180,9 +177,7 @@ fun StreaksCard(
     }
 }
 
-/**
- * Returns an encouraging message based on the current streak status.
- */
+
 private fun getMotivationalMessage(streakData: StreakData): String {
     return when {
         streakData.currentStreak == 0 && streakData.totalStreaksAchieved == 0 -> 

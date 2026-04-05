@@ -47,11 +47,7 @@ private val categoryColors = listOf(
     Color(0xFFFF9800), // Orange
 )
 
-/**
- * A card showing spending breakdown by category with a donut chart.
- * 
- * Based on Buckwheat's CategoriesChartCard implementation.
- */
+//card showing spending breakdown by category with a donut chart
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategoriesChartCard(
@@ -65,7 +61,7 @@ fun CategoriesChartCard(
         return
     }
     
-    // Prepare segments - limit to maxCategories and combine rest
+
     val sortedCategories = categoryBreakdown.entries
         .sortedByDescending { it.value }
         .toList()
@@ -85,7 +81,7 @@ fun CategoriesChartCard(
         hasOverflow = false
     }
     
-    // Create donut segments with colors
+
     val segments = remember(displayCategories) {
         displayCategories.mapIndexed { index, (label, value) ->
             DonutSegment(

@@ -12,6 +12,6 @@ data class TransactionEntity(
     val type: String,        // "INCOME" or "EXPENSE"
     val category: String,    // predefined category tag
     val tags: String = "",   // comma-separated custom tags
-    val date: Long,          // Unix millis
+    val date: Long,
     val note: String = ""
 )

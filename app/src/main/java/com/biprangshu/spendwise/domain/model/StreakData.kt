@@ -18,29 +18,21 @@ data class StreakData(
     val periodStartDate: Long = 0L,
     val pendingCelebration: Boolean = false
 ) {
-    /**
-     * Days remaining to complete current challenge
-     */
+
     val daysRemaining: Int
         get() = (targetStreak - currentStreak).coerceAtLeast(0)
 
-    /**
-     * Progress percentage towards current target (0.0 to 1.0)
-     */
+
     val progress: Float
         get() = if (targetStreak > 0) {
             (currentStreak.toFloat() / targetStreak).coerceIn(0f, 1f)
         } else 0f
 
-    /**
-     * Whether the current challenge has been completed
-     */
+
     val isChallengeComplete: Boolean
         get() = currentStreak >= targetStreak
 
-    /**
-     * Get the next target after completing current challenge
-     */
+
     fun getNextTarget(): Int = when {
         targetStreak < 5 -> 5
         targetStreak < 7 -> 7

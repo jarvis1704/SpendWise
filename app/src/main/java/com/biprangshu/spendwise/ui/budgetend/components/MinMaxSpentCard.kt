@@ -37,12 +37,7 @@ import java.util.Locale
 private val colorMin = Color(0xFF34A853)  // Green
 private val colorMax = Color(0xFFEA4335)  // Red
 
-/**
- * A card showing either the minimum or maximum spend transaction.
- * Shows the amount, date, and transaction title.
- * 
- * Based on Buckwheat's MinMaxSpentCard implementation.
- */
+
 @Composable
 fun MinMaxSpentCard(
     transaction: Transaction?,
@@ -54,7 +49,7 @@ fun MinMaxSpentCard(
 ) {
     val dateFormatter = DateTimeFormatter.ofPattern("d MMM, HH:mm")
     
-    // Calculate color interpolation between min and max colors
+
     val cardColor = if (transaction != null && maxAmount > minAmount) {
         val ratio = ((transaction.amount - minAmount) / (maxAmount - minAmount)).toFloat()
         combineColors(colorMin, colorMax, ratio)
@@ -150,9 +145,7 @@ fun MinMaxSpentCard(
     }
 }
 
-/**
- * A row containing both Min and Max spend cards.
- */
+
 @Composable
 fun MinMaxSpendRow(
     minTransaction: Transaction?,

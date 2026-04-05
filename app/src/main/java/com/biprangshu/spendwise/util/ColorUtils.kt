@@ -5,15 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils as AndroidColorUtils
 
-/**
- * Blends two colors together based on a ratio.
- * Based on Buckwheat's combineColors utility.
- *
- * @param colorA First color
- * @param colorB Second color
- * @param ratio Blend ratio (0.0 = colorA, 1.0 = colorB)
- * @return Blended color
- */
+
 fun combineColors(colorA: Color, colorB: Color, ratio: Float = 0.5f): Color {
     val clampedRatio = ratio.coerceIn(0f, 1f)
     val blended = AndroidColorUtils.blendARGB(colorA.toArgb(), colorB.toArgb(), clampedRatio)

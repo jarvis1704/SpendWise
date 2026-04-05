@@ -36,12 +36,7 @@ import androidx.compose.ui.zIndex
 import com.biprangshu.spendwise.R
 import com.biprangshu.spendwise.util.combineColors
 
-/**
- * An animated header for the finished period screen.
- * Features two large rotating stars with parallax scroll effect.
- * 
- * Based on Buckwheat's FinishedPeriodHeader implementation.
- */
+
 @Composable
 fun FinishedPeriodHeader(
     modifier: Modifier = Modifier,

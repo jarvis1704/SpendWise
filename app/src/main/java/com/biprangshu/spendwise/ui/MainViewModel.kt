@@ -2,6 +2,7 @@ package com.biprangshu.spendwise.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.biprangshu.spendwise.AppStartState
 import com.biprangshu.spendwise.data.preferences.UserPreferencesManager
 import com.biprangshu.spendwise.domain.model.Transaction
 import com.biprangshu.spendwise.domain.usecase.AddTransactionUseCase
@@ -18,7 +19,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
 
-enum class AppStartState { LOADING, ONBOARDING, BUDGET_SET, PERIOD_ENDED, HOME }
+
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -75,16 +76,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Called when user dismisses the budget end screen to proceed to budget setup.
-     */
+
     fun onBudgetEndScreenDismissed() {
         _budgetEndScreenDismissed.value = true
     }
 
-    /**
-     * Reset the dismissed state (e.g., when a new budget period is set).
-     */
+
     fun resetBudgetEndState() {
         _budgetEndScreenDismissed.value = false
     }

@@ -11,40 +11,25 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
-/**
- * Use case for updating and managing streak data.
- * 
- * Checks if the user stayed under their daily budget for previous days
- * and updates the streak accordingly.
- */
+
 class UpdateStreakUseCase @Inject constructor(
     private val streakPreferencesManager: StreakPreferencesManager,
     private val userPreferencesManager: UserPreferencesManager,
     private val transactionRepository: TransactionRepository
 ) {
-    /**
-     * Check and update streaks on app open.
-     * 
-     * This should be called when the app opens to:
-     * 1. Check if the budget period has changed (reset if so)
-     * 2. Check yesterday's spending against daily budget
-     * 3. Update streak count accordingly
-     * 4. Check if a milestone was reached
-     * 
-     * @return Updated StreakData after processing
-     */
+
     suspend operator fun invoke(): StreakData {
         val currentStreakData = streakPreferencesManager.streakData.first()
         val budgetPeriodStart = userPreferencesManager.startPeriodDate.first()
         val totalBudget = userPreferencesManager.totalBudget.first()
         val finishDate = userPreferencesManager.finishPeriodDate.first()
 
-        // If no budget period is set, return current data without changes
+
         if (budgetPeriodStart == null || totalBudget <= 0 || finishDate == null) {
             return currentStreakData
         }
 
-        // Check if budget period has changed - reset if so
+
         if (currentStreakData.periodStartDate != budgetPeriodStart) {
             streakPreferencesManager.resetForNewPeriod(budgetPeriodStart)
             return streakPreferencesManager.streakData.first()
@@ -54,12 +39,12 @@ class UpdateStreakUseCase @Inject constructor(
         val todayEpochDay = today.toEpochDay()
         val lastCheckEpochDay = currentStreakData.lastCheckDate
 
-        // If we already checked today, no need to update
+
         if (lastCheckEpochDay >= todayEpochDay - 1) {
             return currentStreakData
         }
 
-        // Calculate daily budget allowance
+
         val dailyBudget = calculateDailyBudget(totalBudget, budgetPeriodStart, finishDate)
 
         // Check days since last check (up to yesterday)
@@ -125,9 +110,7 @@ class UpdateStreakUseCase @Inject constructor(
         return streakPreferencesManager.streakData.first()
     }
 
-    /**
-     * Manually increment streak (for testing or special cases)
-     */
+
     suspend fun incrementStreak() {
         val current = streakPreferencesManager.streakData.first()
         val newStreak = current.currentStreak + 1
@@ -149,9 +132,7 @@ class UpdateStreakUseCase @Inject constructor(
         streakPreferencesManager.resetCurrentStreak()
     }
 
-    /**
-     * Clear celebration flag after animation plays
-     */
+
     suspend fun clearCelebration() {
         streakPreferencesManager.setPendingCelebration(false)
     }

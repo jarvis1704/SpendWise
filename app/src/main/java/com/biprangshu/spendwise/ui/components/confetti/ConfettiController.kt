@@ -7,10 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.random.Random
 
-/**
- * Controller for managing confetti particle system.
- * Based on the Buckwheat app's ConfettiController implementation.
- */
+
 class ConfettiController {
     
     private val _particles = mutableStateListOf<Particle>()
@@ -19,13 +16,7 @@ class ConfettiController {
     private val _isActive = MutableStateFlow(false)
     val isActive: StateFlow<Boolean> = _isActive.asStateFlow()
 
-    /**
-     * Spawn confetti particles from multiple points (celebration burst)
-     * 
-     * @param screenWidth Width of the screen
-     * @param screenHeight Height of the screen
-     * @param particleCount Number of particles to spawn
-     */
+
     fun spawnCelebration(
         screenWidth: Float,
         screenHeight: Float,
@@ -52,15 +43,7 @@ class ConfettiController {
         }
     }
 
-    /**
-     * Spawn confetti from a specific point (like Buckwheat's FillCircleStub)
-     * 
-     * @param ejectPoint Point to spawn particles from
-     * @param ejectAngle Base ejection angle in degrees
-     * @param angleSpread Spread of ejection angle
-     * @param force Base ejection force
-     * @param particleCount Number of particles
-     */
+
     fun spawn(
         ejectPoint: Offset,
         ejectAngle: Float = 90f,  // Default upward
@@ -84,12 +67,7 @@ class ConfettiController {
         }
     }
 
-    /**
-     * Update all particles for one frame
-     * 
-     * @param deltaTime Time since last frame in seconds
-     * @param screenHeight Height of screen (for cleanup)
-     */
+
     fun update(deltaTime: Float, screenHeight: Float) {
         if (_particles.isEmpty()) {
             _isActive.value = false
@@ -114,16 +92,12 @@ class ConfettiController {
         }
     }
 
-    /**
-     * Clear all particles immediately
-     */
+
     fun clear() {
         _particles.clear()
         _isActive.value = false
     }
 
-    /**
-     * Check if there are any active particles
-     */
+
     fun hasParticles(): Boolean = _particles.isNotEmpty()
 }
