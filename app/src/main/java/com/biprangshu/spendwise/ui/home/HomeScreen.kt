@@ -186,7 +186,7 @@ private fun HomeScreenContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // App Title
+
                 Text(
                     text = "SpendWise",
                     style = robotoFlexTopBarStyle,

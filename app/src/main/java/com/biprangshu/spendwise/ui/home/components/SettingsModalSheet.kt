@@ -172,6 +172,14 @@ fun SettingsSheet(
                 )
 
                 Spacer(Modifier.height(16.dp))
+
+                Text(
+                    text = "Made by Biprangshu Das",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
 
             SnackbarHost(
