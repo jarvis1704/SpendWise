@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
@@ -48,6 +49,7 @@ import com.biprangshu.spendwise.ui.insights.components.InsightCard
 import com.biprangshu.spendwise.ui.insights.components.SpendingAssistantSheet
 import com.biprangshu.spendwise.ui.insights.components.StatSummaryRow
 import com.biprangshu.spendwise.ui.insights.components.WeeklyComparisonChart
+import com.biprangshu.spendwise.util.NotificationHelper
 import com.biprangshu.spendwise.ui.theme.colorExpense
 import com.biprangshu.spendwise.ui.theme.colorIncome
 import com.biprangshu.spendwise.ui.theme.robotoFlexTopBarStyle
@@ -81,10 +83,12 @@ fun InsightsScreen(
     val hasTransactions by viewModel.hasTransactions.collectAsStateWithLifecycle()
     val chatState by viewModel.chatState.collectAsStateWithLifecycle()
     val showConfetti by viewModel.showConfetti.collectAsStateWithLifecycle()
+    val isNotificationsEnabled by viewModel.isNotificationsEnabled.collectAsStateWithLifecycle()
+    val streakData by viewModel.streakData.collectAsStateWithLifecycle()
 
     var showChatSheet by remember { mutableStateOf(false) }
 
-
+    val context = LocalContext.current
     val confettiController = rememberConfettiController()
     var screenWidth by remember { mutableStateOf(0f) }
     var screenHeight by remember { mutableStateOf(0f) }
@@ -97,6 +101,13 @@ fun InsightsScreen(
                 screenHeight = screenHeight,
                 particleCount = 120
             )
+            if (isNotificationsEnabled) {
+                NotificationHelper.postStreakNotification(
+                    context = context,
+                    targetStreak = streakData.targetStreak,
+                    totalAchieved = streakData.totalStreaksAchieved
+                )
+            }
         }
     }
 

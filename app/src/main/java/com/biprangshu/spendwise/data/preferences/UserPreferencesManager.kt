@@ -28,6 +28,10 @@ class UserPreferencesManager(private val context: Context) {
         val RESIDUE_DISTRIBUTION_METHOD_KEY = stringPreferencesKey("residue_distribution_method")
         val LAST_RESIDUE_DIALOG_DAY_KEY = longPreferencesKey("last_residue_dialog_day")
         val IS_BIOMETRIC_ENABLED_KEY = booleanPreferencesKey("is_biometric_enabled")
+        val IS_NOTIFICATIONS_ENABLED_KEY = booleanPreferencesKey("is_notifications_enabled")
+        val NOTIFIED_50_KEY = booleanPreferencesKey("notified_threshold_50")
+        val NOTIFIED_90_KEY = booleanPreferencesKey("notified_threshold_90")
+        val NOTIFIED_100_KEY = booleanPreferencesKey("notified_threshold_100")
 
         const val DEFAULT_DAILY_BUDGET = 2000.0
         const val DEFAULT_CURRENCY_SYMBOL = "₹"
@@ -74,6 +78,22 @@ class UserPreferencesManager(private val context: Context) {
         preferences[IS_BIOMETRIC_ENABLED_KEY] ?: false
     }
 
+    val isNotificationsEnabled: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[IS_NOTIFICATIONS_ENABLED_KEY] ?: true
+    }
+
+    val notifiedThreshold50: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[NOTIFIED_50_KEY] ?: false
+    }
+
+    val notifiedThreshold90: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[NOTIFIED_90_KEY] ?: false
+    }
+
+    val notifiedThreshold100: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[NOTIFIED_100_KEY] ?: false
+    }
+
     suspend fun setDailyBudget(amount: Double) {
         context.dataStore.edit { preferences ->
             preferences[DAILY_BUDGET_KEY] = amount
@@ -97,6 +117,9 @@ class UserPreferencesManager(private val context: Context) {
             preferences[TOTAL_BUDGET_KEY] = total
             preferences[START_PERIOD_DATE_KEY] = startMs
             preferences[FINISH_PERIOD_DATE_KEY] = finishMs
+            preferences.remove(NOTIFIED_50_KEY)
+            preferences.remove(NOTIFIED_90_KEY)
+            preferences.remove(NOTIFIED_100_KEY)
         }
     }
 
@@ -124,6 +147,22 @@ class UserPreferencesManager(private val context: Context) {
         }
     }
 
+    suspend fun setNotificationsEnabled(enabled: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[IS_NOTIFICATIONS_ENABLED_KEY] = enabled
+        }
+    }
+
+    suspend fun setThresholdNotified(threshold: Int) {
+        context.dataStore.edit { preferences ->
+            when (threshold) {
+                50 -> preferences[NOTIFIED_50_KEY] = true
+                90 -> preferences[NOTIFIED_90_KEY] = true
+                100 -> preferences[NOTIFIED_100_KEY] = true
+            }
+        }
+    }
+
     suspend fun clearBudgetPeriod() {
         context.dataStore.edit { preferences ->
             preferences.remove(TOTAL_BUDGET_KEY)
@@ -131,6 +170,9 @@ class UserPreferencesManager(private val context: Context) {
             preferences.remove(FINISH_PERIOD_DATE_KEY)
             preferences.remove(FINISH_PERIOD_ACTUAL_DATE_KEY)
             preferences.remove(LAST_RESIDUE_DIALOG_DAY_KEY)
+            preferences.remove(NOTIFIED_50_KEY)
+            preferences.remove(NOTIFIED_90_KEY)
+            preferences.remove(NOTIFIED_100_KEY)
         }
     }
 

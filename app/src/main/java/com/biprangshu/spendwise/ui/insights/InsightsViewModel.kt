@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.biprangshu.spendwise.data.preferences.StreakPreferencesManager
 import com.biprangshu.spendwise.data.preferences.UserPreferencesManager
+import com.biprangshu.spendwise.domain.model.StreakData
 import com.biprangshu.spendwise.domain.model.TransactionType
 import com.biprangshu.spendwise.domain.repository.TransactionRepository
 import com.biprangshu.spendwise.ui.insights.state.ChatMessage
@@ -138,6 +139,12 @@ class InsightsViewModel @Inject constructor(
     val hasTransactions = allTransactionsFlow
         .map { it.isNotEmpty() }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
+
+    val isNotificationsEnabled = preferencesManager.isNotificationsEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), true)
+
+    val streakData = streakPreferencesManager.streakData
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), StreakData())
 
     // Streak celebration state
     val pendingCelebration = streakPreferencesManager.pendingCelebration

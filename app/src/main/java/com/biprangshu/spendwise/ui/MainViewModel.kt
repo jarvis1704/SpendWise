@@ -37,6 +37,9 @@ class MainViewModel @Inject constructor(
     val isBiometricEnabled: StateFlow<Boolean> = userPreferencesManager.isBiometricEnabled
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
+    val isNotificationsEnabled: StateFlow<Boolean> = userPreferencesManager.isNotificationsEnabled
+        .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+
     private val _isAuthenticated = MutableStateFlow(false)
     val isAuthenticated: StateFlow<Boolean> = _isAuthenticated.asStateFlow()
 
@@ -46,6 +49,10 @@ class MainViewModel @Inject constructor(
 
     fun toggleBiometric(enabled: Boolean) {
         viewModelScope.launch { userPreferencesManager.setBiometricEnabled(enabled) }
+    }
+
+    fun toggleNotifications(enabled: Boolean) {
+        viewModelScope.launch { userPreferencesManager.setNotificationsEnabled(enabled) }
     }
 
     // Track if user has dismissed the budget end screen

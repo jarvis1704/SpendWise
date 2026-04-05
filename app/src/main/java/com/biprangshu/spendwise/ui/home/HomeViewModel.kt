@@ -12,6 +12,7 @@ import com.biprangshu.spendwise.domain.usecase.UpdateStreakUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -192,6 +193,22 @@ class HomeViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000L),
         initialValue = HomeUiState()
     )
+
+    val isNotificationsEnabled: StateFlow<Boolean> = preferencesManager.isNotificationsEnabled
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), true)
+
+    val notifiedThreshold50: StateFlow<Boolean> = preferencesManager.notifiedThreshold50
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
+
+    val notifiedThreshold90: StateFlow<Boolean> = preferencesManager.notifiedThreshold90
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
+
+    val notifiedThreshold100: StateFlow<Boolean> = preferencesManager.notifiedThreshold100
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000L), false)
+
+    fun markThresholdNotified(threshold: Int) {
+        viewModelScope.launch { preferencesManager.setThresholdNotified(threshold) }
+    }
 
     fun dismissResidueDialog(chosenMethod: ResidueDistributionMethod) {
         viewModelScope.launch {

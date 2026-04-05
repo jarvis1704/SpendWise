@@ -1,5 +1,9 @@
 package com.biprangshu.spendwise.ui.home
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,6 +48,7 @@ import com.biprangshu.spendwise.ui.home.components.StreaksCard
 import com.biprangshu.spendwise.ui.home.components.TotalExpenseCard
 import com.biprangshu.spendwise.ui.home.components.TotalIncomeCard
 import com.biprangshu.spendwise.ui.theme.robotoFlexTopBarStyle
+import com.biprangshu.spendwise.util.NotificationHelper
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -56,7 +63,55 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isBiometricEnabled by mainViewModel.isBiometricEnabled.collectAsStateWithLifecycle()
+    val isNotificationsEnabled by mainViewModel.isNotificationsEnabled.collectAsStateWithLifecycle()
+    val notified50 by viewModel.notifiedThreshold50.collectAsStateWithLifecycle()
+    val notified90 by viewModel.notifiedThreshold90.collectAsStateWithLifecycle()
+    val notified100 by viewModel.notifiedThreshold100.collectAsStateWithLifecycle()
     var showSettingsSheet by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
+    //notification permission for andorid 13+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* outcome handled by hasNotificationPermission() at post time */ }
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            !NotificationHelper.hasNotificationPermission(context)
+        ) {
+            permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+
+    LaunchedEffect(uiState.periodExpense, uiState.totalBudget, isNotificationsEnabled) {
+        if (uiState.totalBudget <= 0 || !isNotificationsEnabled) return@LaunchedEffect
+        val ratio = uiState.periodExpense / uiState.totalBudget
+        when {
+            ratio >= 1.0 && !notified100 -> {
+                NotificationHelper.postBudgetThresholdNotification(
+                    context, 100, uiState.currencySymbol,
+                    uiState.periodExpense, uiState.totalBudget
+                )
+                viewModel.markThresholdNotified(100)
+            }
+            ratio >= 0.9 && !notified90 -> {
+                NotificationHelper.postBudgetThresholdNotification(
+                    context, 90, uiState.currencySymbol,
+                    uiState.periodExpense, uiState.totalBudget
+                )
+                viewModel.markThresholdNotified(90)
+            }
+            ratio >= 0.5 && !notified50 -> {
+                NotificationHelper.postBudgetThresholdNotification(
+                    context, 50, uiState.currencySymbol,
+                    uiState.periodExpense, uiState.totalBudget
+                )
+                viewModel.markThresholdNotified(50)
+            }
+        }
+    }
 
     HomeScreenContent(
         uiState = uiState,
@@ -72,7 +127,9 @@ fun HomeScreen(
                 onChangeBudget()
             },
             isBiometricEnabled = isBiometricEnabled,
-            onBiometricToggle = { mainViewModel.toggleBiometric(it) }
+            onBiometricToggle = { mainViewModel.toggleBiometric(it) },
+            isNotificationsEnabled = isNotificationsEnabled,
+            onNotificationsToggle = { mainViewModel.toggleNotifications(it) }
         )
     }
 

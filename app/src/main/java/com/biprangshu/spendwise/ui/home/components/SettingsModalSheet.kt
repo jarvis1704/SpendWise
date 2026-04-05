@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Fingerprint
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Wallet
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,7 +46,9 @@ fun SettingsSheet(
     onDismiss: () -> Unit,
     onChangeBudget: () -> Unit,
     isBiometricEnabled: Boolean,
-    onBiometricToggle: (Boolean) -> Unit
+    onBiometricToggle: (Boolean) -> Unit,
+    isNotificationsEnabled: Boolean,
+    onNotificationsToggle: (Boolean) -> Unit
 ) {
     val haptic = LocalHapticFeedback.current
     val context = LocalContext.current
@@ -136,6 +139,31 @@ fun SettingsSheet(
                                 }
                                 haptic.performHapticFeedback(HapticFeedbackType.KeyboardTap)
                                 onBiometricToggle(enabled)
+                            }
+                        )
+                    },
+                    colors = ListItemDefaults.colors(containerColor = MaterialTheme.colorScheme.surface),
+                    modifier = Modifier.clip(MaterialTheme.shapes.extraLarge)
+                )
+
+                Spacer(Modifier.height(8.dp))
+
+                ListItem(
+                    headlineContent = { Text("Budget & Streak Notifications") },
+                    supportingContent = { Text("Alert when thresholds or streak are reached") },
+                    leadingContent = {
+                        Icon(
+                            Icons.Default.Notifications,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = isNotificationsEnabled,
+                            onCheckedChange = { enabled ->
+                                haptic.performHapticFeedback(HapticFeedbackType.KeyboardTap)
+                                onNotificationsToggle(enabled)
                             }
                         )
                     },
