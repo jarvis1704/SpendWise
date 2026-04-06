@@ -21,12 +21,22 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("/home/biprangshu/Work/AndroidKeyStore/SpendWise.jks")
+            storePassword = "123456"
+            keyAlias = "key0"
+            keyPassword = "123456"
+        }
+    }
+
     buildTypes {
         debug {
             isMinifyEnabled = false
             isShrinkResources = false
         }
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -42,6 +52,10 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    androidResources {
+        localeFilters += "en"
     }
 }
 

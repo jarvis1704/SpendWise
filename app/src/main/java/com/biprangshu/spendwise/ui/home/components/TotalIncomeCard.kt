@@ -69,9 +69,9 @@ fun TotalIncomeCard(
     }
 }
 
-private fun formatAmount(amount: Double): String {
-    return NumberFormat.getNumberInstance(Locale.getDefault()).apply {
-        minimumFractionDigits = 0
-        maximumFractionDigits = 2
-    }.format(amount)
+private val amountFormatter = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
+    minimumFractionDigits = 0
+    maximumFractionDigits = 2
 }
+
+private fun formatAmount(amount: Double): String = amountFormatter.format(amount)

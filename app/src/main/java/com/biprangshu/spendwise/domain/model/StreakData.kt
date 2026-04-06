@@ -1,5 +1,7 @@
 package com.biprangshu.spendwise.domain.model
 
+import androidx.compose.runtime.Immutable
+
 /**
  * Represents the user's streak tracking data for staying under daily budget.
  *
@@ -10,6 +12,7 @@ package com.biprangshu.spendwise.domain.model
  * @param periodStartDate Budget period start date (for reset detection)
  * @param pendingCelebration Flag to trigger confetti animation on Insights screen
  */
+@Immutable
 data class StreakData(
     val currentStreak: Int = 0,
     val targetStreak: Int = 3,

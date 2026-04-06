@@ -8,6 +8,12 @@ import androidx.room.Query
 import com.biprangshu.spendwise.data.local.entity.TransactionEntity
 import kotlinx.coroutines.flow.Flow
 
+data class FinancialSummaryTuple(
+    val todayExpense: Double,
+    val totalIncome: Double,
+    val totalExpense: Double
+)
+
 @Dao
 interface TransactionDao {
 
@@ -90,6 +96,16 @@ interface TransactionDao {
         AND date <= :endDate
     """)
     fun getTotalExpenseForPeriod(startDate: Long, endDate: Long): Flow<Double>
+
+    @Query("""
+        SELECT
+            COALESCE(SUM(CASE WHEN type = 'EXPENSE' AND date >= :todayStart AND date <= :todayEnd
+                             THEN amount ELSE 0 END), 0.0) AS todayExpense,
+            COALESCE(SUM(CASE WHEN type = 'INCOME' THEN amount ELSE 0 END), 0.0) AS totalIncome,
+            COALESCE(SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END), 0.0) AS totalExpense
+        FROM transactions
+    """)
+    fun getFinancialSummaryTuple(todayStart: Long, todayEnd: Long): Flow<FinancialSummaryTuple>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: TransactionEntity)

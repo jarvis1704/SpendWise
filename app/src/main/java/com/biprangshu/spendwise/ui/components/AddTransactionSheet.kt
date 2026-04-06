@@ -226,7 +226,7 @@ fun AddTransactionSheet(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            //todo: make it buckwheat styled Tags
+
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),

@@ -1,5 +1,6 @@
 package com.biprangshu.spendwise.domain.repository
 
+import com.biprangshu.spendwise.domain.model.FinancialSummary
 import com.biprangshu.spendwise.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 
@@ -9,6 +10,7 @@ interface TransactionRepository {
     fun getTodayExpenseTotal(): Flow<Double>
     fun getTotalIncome(): Flow<Double>
     fun getTotalExpense(): Flow<Double>
+    fun getFinancialSummary(): Flow<FinancialSummary>
     fun getExpenseSinceDate(startDate: Long): Flow<Double>
     fun getExpenseForDateRange(start: Long, end: Long): Flow<Double>
     

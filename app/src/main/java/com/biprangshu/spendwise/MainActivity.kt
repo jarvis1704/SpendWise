@@ -46,7 +46,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.activity.viewModels
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,12 +67,18 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.startState.value == AppStartState.LOADING
+        }
         enableEdgeToEdge()
         setContent {
             SpendWiseTheme {
-                SpendWiseApp()
+                SpendWiseApp(viewModel = viewModel)
             }
         }
     }
@@ -116,10 +124,7 @@ fun SpendWiseApp(
     val isAuthenticated by viewModel.isAuthenticated.collectAsStateWithLifecycle()
     val activity = LocalContext.current as FragmentActivity
 
-    if (startState == AppStartState.LOADING) {
-        Box(modifier = Modifier.fillMaxSize())
-        return
-    }
+    if (startState == AppStartState.LOADING) return
 
     //biometric trigger if enabled
     LaunchedEffect(startState, isBiometricEnabled, isAuthenticated) {

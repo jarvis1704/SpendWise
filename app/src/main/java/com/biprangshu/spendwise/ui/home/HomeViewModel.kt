@@ -1,5 +1,6 @@
 package com.biprangshu.spendwise.ui.home
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.biprangshu.spendwise.data.preferences.StreakPreferencesManager
@@ -25,6 +26,7 @@ import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import kotlin.math.max
 
+@Immutable
 data class HomeUiState(
     val dailyBudget: Double = 2000.0,
     val todayExpense: Double = 0.0,
@@ -79,11 +81,8 @@ class HomeViewModel @Inject constructor(
 
     private val _todayResidueOverride = MutableStateFlow<ResidueDistributionMethod?>(null)
 
-    init {
-        // Check and update streaks on app open
-        viewModelScope.launch {
-            updateStreakUseCase()
-        }
+    fun triggerStreakUpdate() {
+        viewModelScope.launch { updateStreakUseCase() }
     }
 
     val uiState = combine(

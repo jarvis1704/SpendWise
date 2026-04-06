@@ -2,6 +2,7 @@ package com.biprangshu.spendwise.data.repository
 
 import com.biprangshu.spendwise.data.local.dao.TransactionDao
 import com.biprangshu.spendwise.data.local.entity.TransactionEntity
+import com.biprangshu.spendwise.domain.model.FinancialSummary
 import com.biprangshu.spendwise.domain.model.Transaction
 import com.biprangshu.spendwise.domain.model.TransactionType
 import com.biprangshu.spendwise.domain.repository.TransactionRepository
@@ -37,6 +38,17 @@ class RoomTransactionRepository @Inject constructor(
 
     override fun getTotalExpense(): Flow<Double> {
         return transactionDao.getTotalExpense()
+    }
+
+    override fun getFinancialSummary(): Flow<FinancialSummary> {
+        val (startOfDay, endOfDay) = getTodayRange()
+        return transactionDao.getFinancialSummaryTuple(startOfDay, endOfDay).map { tuple ->
+            FinancialSummary(
+                todayExpense = tuple.todayExpense,
+                totalIncome = tuple.totalIncome,
+                totalExpense = tuple.totalExpense
+            )
+        }
     }
 
     override fun getExpenseSinceDate(startDate: Long): Flow<Double> {
