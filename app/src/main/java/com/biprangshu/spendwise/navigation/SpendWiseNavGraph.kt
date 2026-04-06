@@ -28,7 +28,31 @@ fun SpendWiseNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        enterTransition = {
+            navEnterTransition(
+                initialState.destination.bottomNavIndex(),
+                targetState.destination.bottomNavIndex()
+            )
+        },
+        exitTransition = {
+            navExitTransition(
+                initialState.destination.bottomNavIndex(),
+                targetState.destination.bottomNavIndex()
+            )
+        },
+        popEnterTransition = {
+            navEnterTransition(
+                initialState.destination.bottomNavIndex(),
+                targetState.destination.bottomNavIndex()
+            )
+        },
+        popExitTransition = {
+            navExitTransition(
+                initialState.destination.bottomNavIndex(),
+                targetState.destination.bottomNavIndex()
+            )
+        }
     ) {
         composable<Screen.Onboarding> { backStackEntry ->
             val showBudgetModal by backStackEntry.savedStateHandle
