@@ -332,13 +332,13 @@ private fun ResidueDistributionContent(
         )
         ResidueOptionRow(
             title = "Distribute",
-            subtitle = "The restless residue will be distributed on the remaining days",
+            subtitle = "The residue will be distributed on the remaining days",
             selected = currentMethod == ResidueDistributionMethod.DISTRIBUTE,
             onClick = { onMethodSelected(ResidueDistributionMethod.DISTRIBUTE) }
         )
         ResidueOptionRow(
             title = "Add to the current daily budget",
-            subtitle = "The restless residue will be added to the current daily budget",
+            subtitle = "The residue will be added to the current daily budget",
             selected = currentMethod == ResidueDistributionMethod.ADD_TO_CURRENT,
             onClick = { onMethodSelected(ResidueDistributionMethod.ADD_TO_CURRENT) }
         )
