@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.baselineprofile)
     id("com.google.gms.google-services")
 }
 
@@ -64,6 +65,8 @@ ksp {
 }
 
 dependencies {
+    baselineProfile(project(":baselineprofile"))
+
     implementation(libs.firebase.ai)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.androidx.core.ktx)
@@ -121,6 +124,9 @@ dependencies {
     // Biometric
     implementation(libs.androidx.biometric)
 
+    // Baseline profiles
+    implementation(libs.androidx.profileinstaller)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -128,4 +134,9 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+}
+
+baselineProfile {
+    automaticGenerationDuringBuild = false
+    dexLayoutOptimization = true
 }

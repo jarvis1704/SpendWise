@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "SpendWise"
 include(":app")
+include(":baselineprofile")
  
