@@ -10,14 +10,14 @@ plugins {
 
 android {
     namespace = "com.biprangshu.spendwise"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.biprangshu.spendwise"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 2
-        versionName = "1.1"
+        targetSdk = 37
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
