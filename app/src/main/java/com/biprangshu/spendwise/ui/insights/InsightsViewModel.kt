@@ -192,7 +192,7 @@ class InsightsViewModel @Inject constructor(
             try {
                 val prompt = buildPrompt(userMessage)
                 val model = Firebase.ai(backend = GenerativeBackend.googleAI())
-                    .generativeModel("gemini-3.1-flash-lite-preview")
+                    .generativeModel("gemini-3.1-flash-lite")
                 val response = model.generateContent(prompt)
                 val aiMsg = ChatMessage(
                     id = UUID.randomUUID().toString(),
