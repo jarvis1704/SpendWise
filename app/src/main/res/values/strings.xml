@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SpendWise</string>
+    <string name="widget_name">Add Spend</string>
+    <string name="widget_description">Quickly add transactions and see today\'s spending.</string>
 </resources>

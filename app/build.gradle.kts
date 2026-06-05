@@ -16,8 +16,8 @@ android {
         applicationId = "com.biprangshu.spendwise"
         minSdk = 24
         targetSdk = 37
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -106,6 +106,10 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+
+    // Jetpack Glance (AppWidgets)
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
 
     // Lifecycle ViewModel + collectAsStateWithLifecycle
     implementation(libs.androidx.lifecycle.viewmodel.compose)

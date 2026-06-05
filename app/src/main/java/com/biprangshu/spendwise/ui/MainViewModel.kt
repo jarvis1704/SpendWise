@@ -43,6 +43,13 @@ class MainViewModel @Inject constructor(
     private val _isAuthenticated = MutableStateFlow(false)
     val isAuthenticated: StateFlow<Boolean> = _isAuthenticated.asStateFlow()
 
+    private val _openAddTransactionTrigger = MutableStateFlow(false)
+    val openAddTransactionTrigger: StateFlow<Boolean> = _openAddTransactionTrigger.asStateFlow()
+
+    fun triggerAddTransaction(trigger: Boolean) {
+        _openAddTransactionTrigger.value = trigger
+    }
+
     fun onAuthenticationSuccess() {
         _isAuthenticated.value = true
     }

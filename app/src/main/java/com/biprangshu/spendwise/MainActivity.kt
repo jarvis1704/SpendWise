@@ -62,6 +62,7 @@ import com.biprangshu.spendwise.ui.biometric.BiometricLockScreen
 import com.biprangshu.spendwise.ui.budgetend.BudgetEndScreen
 import com.biprangshu.spendwise.ui.components.AddTransactionSheet
 import com.biprangshu.spendwise.ui.theme.SpendWiseTheme
+import android.content.Intent
 import com.biprangshu.spendwise.util.showBiometricPrompt
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,6 +73,7 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        handleIntent(intent)
         splashScreen.setKeepOnScreenCondition {
             viewModel.startState.value == AppStartState.LOADING
         }
@@ -81,6 +83,23 @@ class MainActivity : FragmentActivity() {
                 SpendWiseApp(viewModel = viewModel)
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        if (intent?.action == ACTION_ADD_TRANSACTION ||
+            intent?.getBooleanExtra(EXTRA_OPEN_ADD_TRANSACTION, false) == true) {
+            viewModel.triggerAddTransaction(true)
+        }
+    }
+
+    companion object {
+        const val ACTION_ADD_TRANSACTION = "com.biprangshu.spendwise.action.ADD_TRANSACTION"
+        const val EXTRA_OPEN_ADD_TRANSACTION = "EXTRA_OPEN_ADD_TRANSACTION"
     }
 }
 
@@ -167,8 +186,22 @@ fun SpendWiseApp(
     val haptic = LocalHapticFeedback.current
 
     val currencySymbol by viewModel.currencySymbol.collectAsStateWithLifecycle()
+    val openAddTransactionTrigger by viewModel.openAddTransactionTrigger.collectAsStateWithLifecycle()
 
     var showAddTransaction by remember { mutableStateOf(false) }
+
+    LaunchedEffect(openAddTransactionTrigger, startState, isAuthenticated, isBiometricEnabled) {
+        if (openAddTransactionTrigger && startState != AppStartState.LOADING) {
+            if (startState == AppStartState.HOME || startState == AppStartState.BUDGET_SET) {
+                if (!isBiometricEnabled || isAuthenticated) {
+                    showAddTransaction = true
+                    viewModel.triggerAddTransaction(false)
+                }
+            } else {
+                viewModel.triggerAddTransaction(false)
+            }
+        }
+    }
 
     val currentRoute = navBackStackEntry?.destination?.route
     val isHomeScreen = currentRoute?.contains("Home") == true
