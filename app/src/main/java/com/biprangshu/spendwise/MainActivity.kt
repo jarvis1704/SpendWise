@@ -145,6 +145,7 @@ fun SpendWiseApp(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val startState by viewModel.startState.collectAsStateWithLifecycle()
+    val startInsightsScreen by viewModel.openInsightsScreen.collectAsStateWithLifecycle()
     val isBiometricEnabled by viewModel.isBiometricEnabled.collectAsStateWithLifecycle()
     val isAuthenticated by viewModel.isAuthenticated.collectAsStateWithLifecycle()
     val activity = LocalContext.current as FragmentActivity
@@ -207,6 +208,27 @@ fun SpendWiseApp(
                 viewModel.triggerAddTransaction(false)
             }
         }
+    }
+
+    //launchedeffect for insighsscreen
+    LaunchedEffect(startInsightsScreen, startState, isAuthenticated, isBiometricEnabled) {
+        if(startState != AppStartState.LOADING){
+            if (startInsightsScreen && startState != AppStartState.LOADING) {
+                if (startState == AppStartState.HOME) {
+                    if (!isBiometricEnabled || isAuthenticated) {
+                        navController.navigate(Screen.Insights) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                        viewModel.triggerOpenInsightsScreen(false)
+                    }
+                }
+            }
+        }
+
     }
 
     val currentRoute = navBackStackEntry?.destination?.route
