@@ -46,8 +46,17 @@ class MainViewModel @Inject constructor(
     private val _openAddTransactionTrigger = MutableStateFlow(false)
     val openAddTransactionTrigger: StateFlow<Boolean> = _openAddTransactionTrigger.asStateFlow()
 
+
+    private val _openInsightsScreen = MutableStateFlow(false)
+    val openInsightsScreen: StateFlow<Boolean> = _openInsightsScreen.asStateFlow()
+
+
     fun triggerAddTransaction(trigger: Boolean) {
         _openAddTransactionTrigger.value = trigger
+    }
+
+    fun triggerOpenInsightsScreen(trigger: Boolean){
+        _openInsightsScreen.value = trigger
     }
 
     fun onAuthenticationSuccess() {

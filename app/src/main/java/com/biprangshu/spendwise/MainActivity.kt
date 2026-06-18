@@ -95,11 +95,17 @@ class MainActivity : FragmentActivity() {
             intent?.getBooleanExtra(EXTRA_OPEN_ADD_TRANSACTION, false) == true) {
             viewModel.triggerAddTransaction(true)
         }
+
+        if(intent?.action == ACTION_OPEN_INSIGHTS_SCREEN){
+            viewModel.triggerOpenInsightsScreen(true)
+        }
     }
 
     companion object {
         const val ACTION_ADD_TRANSACTION = "com.biprangshu.spendwise.action.ADD_TRANSACTION"
         const val EXTRA_OPEN_ADD_TRANSACTION = "EXTRA_OPEN_ADD_TRANSACTION"
+
+        const val ACTION_OPEN_INSIGHTS_SCREEN = "com.biprangshu.spendwise.action.OPEN_INSIGHTS_SCREEN"
     }
 }
 

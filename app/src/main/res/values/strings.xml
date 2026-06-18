@@ -3,4 +3,5 @@
     <string name="widget_name">Add Spend</string>
     <string name="widget_description">Quickly add transactions and see today\'s spending.</string>
     <string name="widget_budget_progress_name">Budget Progress</string>
+    <string name="widget_budget_progress_description">Track your remaining monthly budget at a glance.</string>
 </resources>
