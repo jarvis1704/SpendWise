@@ -16,8 +16,8 @@ android {
         applicationId = "com.biprangshu.spendwise"
         minSdk = 24
         targetSdk = 37
-        versionCode = 4
-        versionName = "1.5"
+        versionCode = 5
+        versionName = "1.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
