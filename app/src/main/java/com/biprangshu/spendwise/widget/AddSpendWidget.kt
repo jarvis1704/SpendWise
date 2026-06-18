@@ -37,15 +37,10 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.biprangshu.spendwise.MainActivity
 import com.biprangshu.spendwise.R
-import com.biprangshu.spendwise.data.preferences.UserPreferencesManager
 import com.biprangshu.spendwise.di.WidgetEntryPoint
-import com.biprangshu.spendwise.domain.repository.TransactionRepository
 import com.biprangshu.spendwise.ui.theme.DarkColorScheme
 import com.biprangshu.spendwise.ui.theme.LightColorScheme
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 
 
 class AddSpendWidget : GlanceAppWidget() {
