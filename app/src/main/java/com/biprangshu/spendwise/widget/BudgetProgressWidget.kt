@@ -42,10 +42,24 @@ class BudgetProgressWidget: GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val entryPoint = EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            WidgetEntryPoint::class.java
-        )
+        val entryPoint = try {
+            EntryPointAccessors.fromApplication(
+                context.applicationContext,
+                WidgetEntryPoint::class.java
+            )
+        } catch (_: Exception) {
+            provideContent {
+                GlanceTheme {
+                    Box(
+                        modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.background),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Widget unavailable", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 12.sp))
+                    }
+                }
+            }
+            return
+        }
         val repository = entryPoint.transactionRepository()
         val userPreferences = entryPoint.userPreferencesManager()
 
@@ -87,6 +101,7 @@ fun BudgetProgressWidgetComposable(
 ) {
     val size = LocalSize.current
     val intent = Intent(context, MainActivity::class.java).apply {
+        action = MainActivity.ACTION_OPEN_INSIGHTS_SCREEN
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
     }
 

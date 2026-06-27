@@ -47,10 +47,24 @@ class AddSpendWidget : GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val entryPoint = EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            WidgetEntryPoint::class.java
-        )
+        val entryPoint = try {
+            EntryPointAccessors.fromApplication(
+                context.applicationContext,
+                WidgetEntryPoint::class.java
+            )
+        } catch (_: Exception) {
+            provideContent {
+                GlanceTheme {
+                    Box(
+                        modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.background),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Widget unavailable", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 12.sp))
+                    }
+                }
+            }
+            return
+        }
         val repository = entryPoint.transactionRepository()
         val userPreferences = entryPoint.userPreferencesManager()
 

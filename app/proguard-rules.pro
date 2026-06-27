@@ -25,8 +25,17 @@
 -keep class com.biprangshu.spendwise.widget.** { *; }
 
 # ── Hilt EntryPoint for Widget ────────────────────────────────────────────────
-# EntryPointAccessors.fromApplication() uses reflection to find the interface.
+# EntryPointAccessors uses the interface type to cast the generated SingletonC
+# component at runtime. Both the interface AND every class implementing it must
+# be kept so R8 doesn't strip the concrete transactionRepository() /
+# userPreferencesManager() method bodies from the generated component.
 -keep interface com.biprangshu.spendwise.di.WidgetEntryPoint { *; }
+-keep class * implements com.biprangshu.spendwise.di.WidgetEntryPoint { *; }
+
+# UserPreferencesManager has no @Inject constructor (provided via @Provides),
+# so R8 has more freedom to rename its members. Keep the class and all public
+# Flow properties accessed from the widget.
+-keep class com.biprangshu.spendwise.data.preferences.UserPreferencesManager { *; }
 
 # ── Room ──────────────────────────────────────────────────────────────────────
 # Room @Query methods that return data classes need field names preserved
