@@ -37,6 +37,15 @@
 # Flow properties accessed from the widget.
 -keep class com.biprangshu.spendwise.data.preferences.UserPreferencesManager { *; }
 
+# TransactionRepository is returned from the WidgetEntryPoint reflective boundary.
+# Keep the interface + its methods so the widget's getTodayExpenseTotal() /
+# getExpenseSinceDate() calls survive R8 full-mode devirtualization/optimization.
+-keep interface com.biprangshu.spendwise.domain.repository.TransactionRepository { *; }
+
+# Glance widgets build ColorProviders from these top-level ColorScheme vals.
+# Keep them so full-mode optimization can't break the reference from widget code.
+-keep class com.biprangshu.spendwise.ui.theme.** { *; }
+
 # ── Room ──────────────────────────────────────────────────────────────────────
 # Room @Query methods that return data classes need field names preserved
 # so Room can map SQL column aliases to constructor parameters.

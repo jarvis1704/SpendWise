@@ -37,39 +37,29 @@ import com.biprangshu.spendwise.di.WidgetEntryPoint
 import com.biprangshu.spendwise.ui.theme.DarkColorScheme
 import com.biprangshu.spendwise.ui.theme.LightColorScheme
 import dagger.hilt.android.EntryPointAccessors
+import com.biprangshu.spendwise.data.preferences.UserPreferencesManager
+import com.biprangshu.spendwise.domain.repository.TransactionRepository
 
 class BudgetProgressWidget: GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val entryPoint = try {
-            EntryPointAccessors.fromApplication(
+        val repository: TransactionRepository
+        val userPreferences: UserPreferencesManager
+        try {
+            val entryPoint = EntryPointAccessors.fromApplication(
                 context.applicationContext,
                 WidgetEntryPoint::class.java
             )
-        } catch (_: Exception) {
-            provideContent {
-                GlanceTheme {
-                    Box(
-                        modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.background),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("Widget unavailable", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 12.sp))
-                    }
-                }
-            }
-            return
+            repository = entryPoint.transactionRepository()
+            userPreferences = entryPoint.userPreferencesManager()
+        } catch (t: Throwable) {
+            android.util.Log.e("BudgetProgressWidget", "provideGlance setup failed", t)
+            provideContent { WidgetUnavailable() }
         }
-        val repository = entryPoint.transactionRepository()
-        val userPreferences = entryPoint.userPreferencesManager()
-
-        val spendWiseWidgetColors = ColorProviders(
-            light = LightColorScheme,
-            dark = DarkColorScheme
-        )
 
         provideContent {
-            GlanceTheme(colors = spendWiseWidgetColors) {
+            GlanceTheme(colors = ColorProviders(light = LightColorScheme, dark = DarkColorScheme)) {
                 val totalBudget by userPreferences.totalBudget.collectAsState(initial = 0.0)
                 val currencySymbol by userPreferences.currencySymbol.collectAsState(initial = "₹")
                 val startMs by userPreferences.startPeriodDate.collectAsState(initial = null)
@@ -88,6 +78,21 @@ class BudgetProgressWidget: GlanceAppWidget() {
                     currency = currencySymbol
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun WidgetUnavailable() {
+    GlanceTheme {
+        Box(
+            modifier = GlanceModifier.fillMaxSize().background(GlanceTheme.colors.background),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                "Open SpendWise to load",
+                style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 12.sp)
+            )
         }
     }
 }
